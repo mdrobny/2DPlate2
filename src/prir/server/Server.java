@@ -3,8 +3,6 @@ package prir.server;
 import java.rmi.*;
 import java.rmi.registry.*;
 
-import prir.api.*;
-
 public class Server {
     private static final int PORT = 1099;
     private static Registry registry;
@@ -24,6 +22,6 @@ public class Server {
     public static void main(String[] args) throws Exception {
         startRegistry();
         registerObject("plate", new ApiImplementation());
-        Thread.sleep(5 * 60 * 1000);
+//        Thread.sleep(5 * 60 * 1000);
     }
 }

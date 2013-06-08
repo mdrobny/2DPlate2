@@ -1,9 +1,9 @@
 all:
-	javac prir/api/Api.java prir/api/Plate.java
+	javac prir/api/Api.java
 #	jar cvf api.jar prir/api/*.class
 	javac prir/server/Server.java prir/server/ApiImplementation.java
 #	jar cvf server.jar prir/server/*.class
-	javac prir/client/Client.java
+	javac prir/client/Client.java prir/client/Plate.java
 #	jar cvf client.jar prir/client/*.class
 kill:
 	killall -q java
