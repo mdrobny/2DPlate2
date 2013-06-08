@@ -8,9 +8,16 @@ all:
 kill:
 	killall -q java
 run_server:
-#	java -classpath /home/drobny/workspace_java/Test2/classes/api.jar /home/drobny/workspace_java/Test2/classes/server.jar -Djava.rmi.server.codebase=file:///home/drobny/workspace_java/Test2/classes/ prir.server.Server &
-#	java -classpath . -Djava.rmi.server.codebase=file:///home/drobny/workspace_java/Test2/classes/ prir.server.Server &
+#	java -classpath /home/drobny/prir/project2/2DPlate2/src/api.jar /home/drobny/prir/project2/2DPlate2/src/server.jar -Djava.rmi.server.codebase=file:////home/drobny/prir/project2/2DPlate2/src/ prir.server.Server &
+#	java -classpath /home/drobny/prir/project2/2DPlate2/src -Djava.rmi.server.codebase=file:////home/drobny/prir/project2/2DPlate2/src prir.server.Server &
 	java -classpath . prir.server.Server &
 
 run_client:
 	java -classpath . prir.client.Client
+	
+help:
+	@echo 'Uzycie:'
+	@echo 'all: kompilacja Api, Serwera i Klienta'
+	@echo 'kill: zabicie dzialajacych serwerow'
+	@echo 'run_server: start servera'
+	@echo 'run_client: start klienta'
