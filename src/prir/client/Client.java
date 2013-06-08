@@ -24,17 +24,20 @@ public class Client {
     	/*    main loop in plate array	*/
     	int i,j;
     	for(i=1;i<N-1;i++){
-    		for(j=1;j<N-1;){
+    		for(j=1;j<N-1;j++){
     			TempThread t1 = new TempThread(remoteApi, p, i, j++);
-    			t1.run();
-    			TempThread t2 = new TempThread(remoteApi, p, i, j++);
-    			t2.run();
+    			t1.start();
+    			TempThread t2 = new TempThread(remoteApi, p, i, j);
+    			t2.start();
 //    			Thread.sleep(2000);
     			
 //    			p[i][j] = remoteApi.temperature(p,i,j);
+//    			System.out.printf("[%d %d] %f ",i,j,p[i][j]); j++;
+//    			p[i][j] = remoteApi.temperature(p,i,j);
 //    			System.out.printf("[%d %d] %f ",i,j,p[i][j]);
+//    			Thread.sleep(2000);
     		}
-    		System.out.printf("\n");
+//    		System.out.printf("\n");
     	}
 
     	plate.showAndSavePlate(p, false);
