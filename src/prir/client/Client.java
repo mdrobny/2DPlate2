@@ -27,7 +27,7 @@ public class Client {
     		for(j=1;j<N-1;j++){
     			p[i][j] = remoteApi.temperature(p,i,j);
     			
-    			System.out.printf("[%d %d] %f\n",i,j,p[i][j]);
+    			System.out.printf("[%d %d] %f ",i,j,p[i][j]);
     		}
     		System.out.printf("\n");
     	}

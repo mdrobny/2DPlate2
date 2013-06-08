@@ -32,7 +32,7 @@ public class ApiImplementation extends UnicastRemoteObject implements Api {
 			temp = accu/n;
 		}
 //		plate.p[x][y] = temp;
-		System.out.printf("temp: [%d %d] %f\n",x,y,temp);
+//		System.out.printf("temp: [%d %d] %f\n",x,y,temp);
 		return temp;
 	}
 	
@@ -52,7 +52,7 @@ public class ApiImplementation extends UnicastRemoteObject implements Api {
 	*	ends after reaching counted temperature
 	*/
 	private double walk2(double p[][],int x, int y){
-		switch(randDirection()){
+		switch(this.randDirection()){
 			case 1:	if(p[--x][y] < 0) break;
 				else return p[x][y]; 
 			case 2:  if(p[x][++y] < 0) break;
@@ -62,6 +62,6 @@ public class ApiImplementation extends UnicastRemoteObject implements Api {
 			case 4:  if(p[x][--y] < 0) break;
 				else return p[x][y]; 
 		}
-		return walk2(p,x,y);
+		return this.walk2(p,x,y);
 	}
 }
