@@ -1,7 +1,9 @@
 package prir.client;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
+import java.util.ArrayList;
 
 import prir.api.*;
 
@@ -13,50 +15,60 @@ public class Client {
     public final static int N = 10;
 
     public static void main(String[] args) throws Exception {
-        registry = LocateRegistry.getRegistry(HOST, PORT);
-        final Api remoteApi = (Api) registry.lookup("plate");
+        registry = LocateRegistry.getRegistry(HOST, PORT + 1);
+        final Api remoteServer1 = (Api) registry.lookup("plate1");
+//        final Api remoteServer2 = (Api) registry.lookup("plate2");
         
         double p[][] = new double[N][N];
-        Plate plate = new Plate(N);
+        final Plate plate = new Plate(N);
         
         plate.setEdgeTemp(p);
 
     	/*    main loop in plate array	*/
+        Api tmpRemoteServerRef = remoteServer1;
+        ArrayList<TempThread> threadList = new ArrayList<TempThread>();
     	int i,j;
     	for(i=1;i<N-1;i++){
     		for(j=1;j<N-1;j++){
-    			TempThread t1 = new TempThread(remoteApi, p, i, j++);
-    			t1.start();
-    			TempThread t2 = new TempThread(remoteApi, p, i, j);
-    			t2.start();
-//    			Thread.sleep(2000);
+    			TempThread tmpT = new TempThread(tmpRemoteServerRef, p, i, j);
+    			threadList.add( tmpT );
+    			tmpT.start();
+//    			tmpRemoteServerRef = (tmpRemoteServerRef==remoteServer1) ? remoteServer2 : remoteServer1;
+
     			
 //    			p[i][j] = remoteApi.temperature(p,i,j);
 //    			System.out.printf("[%d %d] %f ",i,j,p[i][j]); j++;
-//    			p[i][j] = remoteApi.temperature(p,i,j);
-//    			System.out.printf("[%d %d] %f ",i,j,p[i][j]);
-//    			Thread.sleep(2000);
     		}
-//    		System.out.printf("\n");
     	}
 
+    	for(TempThread t: threadList){
+    		t.join();
+    	}
     	plate.showAndSavePlate(p, false);
+    	System.out.print("\n");
+//    	new Thread( new ShowAndSavePlate(plate, p) ).start();
+    	
  
     }
     
     
 }
 
+/**
+ * Calculates temperature in [x,y] point in individual thread on chosen server 
+ * @author drobny
+ *
+ */
 class TempThread extends Thread {
 	
-	private Api remoteApi;
+	private Api remoteServer;
 	private double[][] p;
 	private int x;
 	private int y;
 	
 	
-	public TempThread(Api remoteApi,double[][] p, int x, int y) {
-		this.remoteApi = remoteApi;
+	public TempThread(Api server,double[][] p, int x, int y) {
+		this.remoteServer = server;
 		this.p = p;
 		this.x = x;
 		this.y = y;
@@ -65,9 +77,8 @@ class TempThread extends Thread {
 	@Override
 	public void run() {
 		try {
-//			System.out.print("Thread, ["+ this.x +"]["+ this.y +"]");
 			
-			p[x][y] = remoteApi.temperature(p,x,y);
+			p[x][y] = remoteServer.temperature(p,x,y);
 			System.out.printf("[%d %d] %f ",x,y,p[x][y]);
 			
 		} catch (RemoteException e) {
@@ -77,3 +88,30 @@ class TempThread extends Thread {
 	}
 	
 }
+
+/**
+ * Thread to save temperature array (p) to file
+ * @author drobny
+ *
+ */
+//class ShowAndSavePlate implements Runnable {
+//	
+//	private Plate plate;
+//	private double[][] p;
+//	
+//	public ShowAndSavePlate(Plate plate, double[][] p){
+//		this.plate = plate;
+//		this.p = p;
+//	}
+//
+//	@Override
+//	public void run() {
+//		try {
+//			System.out.println("\n\nShowAndSaveThread");
+//			plate.showAndSavePlate(p, false);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	
+//}
