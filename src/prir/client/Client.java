@@ -1,6 +1,5 @@
 package prir.client;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.util.ArrayList;
@@ -12,12 +11,13 @@ public class Client {
     private static final int PORT = 1099;
     private static Registry registry;
     
-    public final static int N = 10;
+    public final static int N = 20;
 
     public static void main(String[] args) throws Exception {
         registry = LocateRegistry.getRegistry(HOST, PORT + 1);
         final Api remoteServer1 = (Api) registry.lookup("plate1");
-//        final Api remoteServer2 = (Api) registry.lookup("plate2");
+        registry = LocateRegistry.getRegistry(HOST, PORT + 2);
+        final Api remoteServer2 = (Api) registry.lookup("plate2");
         
         double p[][] = new double[N][N];
         final Plate plate = new Plate(N);
@@ -33,7 +33,7 @@ public class Client {
     			TempThread tmpT = new TempThread(tmpRemoteServerRef, p, i, j);
     			threadList.add( tmpT );
     			tmpT.start();
-//    			tmpRemoteServerRef = (tmpRemoteServerRef==remoteServer1) ? remoteServer2 : remoteServer1;
+    			tmpRemoteServerRef = (tmpRemoteServerRef==remoteServer1) ? remoteServer2 : remoteServer1;
 
     			
 //    			p[i][j] = remoteApi.temperature(p,i,j);

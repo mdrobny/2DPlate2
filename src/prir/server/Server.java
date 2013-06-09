@@ -15,15 +15,13 @@ public class Server {
     public static void registerObject(String name, Remote remoteObj)
         throws RemoteException, AlreadyBoundException {
         registry.bind(name, remoteObj);
-        System.out.println("Registered: " + name + " -> " +
-            remoteObj.getClass().getName() + "[" + remoteObj + "]");
+        System.out.println("Registered: " + name );
+//            remoteObj.getClass().getName() + "[" + remoteObj + "]");
     }
 
     public static void main(String[] args) throws Exception {
-        startRegistry(1);
+        startRegistry( Integer.parseInt(args[0]) );
         registerObject("plate"+ args[0], new ApiImplementation());
-//        startRegistry(2);
-//        registerObject("plate"+ args[0], new ApiImplementation());
-//        Thread.sleep(5 * 60 * 1000);
+        
     }
 }
