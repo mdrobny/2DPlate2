@@ -11,7 +11,7 @@ public class Client {
     private static final int PORT = 1099;
     private static Registry registry;
     
-    public final static int N = 20;
+    public final static int N = 10;
 
     public static void main(String[] args) throws Exception {
         registry = LocateRegistry.getRegistry(HOST, PORT + 1);
@@ -19,6 +19,7 @@ public class Client {
         registry = LocateRegistry.getRegistry(HOST, PORT + 2);
         final Api remoteServer2 = (Api) registry.lookup("plate2");
         
+        /** main temperature array **/
         double p[][] = new double[N][N];
         final Plate plate = new Plate(N);
         
@@ -34,16 +35,14 @@ public class Client {
     			threadList.add( tmpT );
     			tmpT.start();
     			tmpRemoteServerRef = (tmpRemoteServerRef==remoteServer1) ? remoteServer2 : remoteServer1;
-
     			
-//    			p[i][j] = remoteApi.temperature(p,i,j);
-//    			System.out.printf("[%d %d] %f ",i,j,p[i][j]); j++;
     		}
     	}
 
     	for(TempThread t: threadList){
     		t.join();
     	}
+    	
     	plate.showAndSavePlate(p, false);
     	System.out.print("\n");
 //    	new Thread( new ShowAndSavePlate(plate, p) ).start();

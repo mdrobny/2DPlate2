@@ -10,11 +10,13 @@ kill:
 run_server:
 #	java -classpath /home/drobny/prir/project2/2DPlate2/src/api.jar /home/drobny/prir/project2/2DPlate2/src/server.jar -Djava.rmi.server.codebase=file:////home/drobny/prir/project2/2DPlate2/src/ prir.server.Server &
 #	java -classpath /home/drobny/prir/project2/2DPlate2/src -Djava.rmi.server.codebase=file:////home/drobny/prir/project2/2DPlate2/src prir.server.Server &
-	java -classpath . prir.server.Server 1 &
-	java -classpath . prir.server.Server 2 &
+#	java -classpath . prir.server.Server 1 &
+#	java -classpath . prir.server.Server 2 &
+	java -classpath . -Djava.security.policy=java.policy prir.server.Server 1 &
+	java -classpath . -Djava.security.policy=java.policy prir.server.Server 2 &	
 	
 run_client:
-	java -classpath . prir.client.Client
+	java -classpath . -Djava.security.policy=java.policy prir.client.Client
 	
 help:
 	@echo 'Uzycie:'
