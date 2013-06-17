@@ -3,10 +3,9 @@ all:
 #	jar cvf api.jar prir/api/*.class
 	javac prir/server/Server.java prir/server/ApiImplementation.java
 #	jar cvf server.jar prir/server/*.class
-	javac prir/client/Client.java prir/client/Plate.java prir/client/ChartPanel.java prir/client/PlotFrame.java -classpath jheatchart-0.6.jar
-#	jar cvf client.jar prir/client/*.class
+	javac prir/client/Client.java prir/client/Plate.java prir/client/PlotFrame.java org/fsf/HeatMap.java org/fsf/Gradient.java
 kill:
-	killall -q java
+	killall -q Server
 run_server:
 #	java -classpath /home/drobny/prir/project2/2DPlate2/src/api.jar /home/drobny/prir/project2/2DPlate2/src/server.jar -Djava.rmi.server.codebase=file:////home/drobny/prir/project2/2DPlate2/src/ prir.server.Server &
 #	java -classpath /home/drobny/prir/project2/2DPlate2/src -Djava.rmi.server.codebase=file:////home/drobny/prir/project2/2DPlate2/src prir.server.Server &

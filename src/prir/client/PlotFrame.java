@@ -5,10 +5,8 @@
 package prir.client;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.JPanel;
-import org.tc33.jheatchart.HeatChart;
+import org.fsf.*;
 
 
 /**
@@ -16,7 +14,7 @@ import org.tc33.jheatchart.HeatChart;
  * @author reynev
  */
 public class PlotFrame extends javax.swing.JFrame {
-    HeatChart chart;
+    HeatMap hMap;
     double [][] map;
     Image mapImg = null;
     /**
@@ -25,20 +23,33 @@ public class PlotFrame extends javax.swing.JFrame {
     public PlotFrame(int n) {
         initComponents();
         map = new double[n][n];
-        chart = new HeatChart(map);
-        chartPanel.setChart(chart);
-        chart.setHighValueColour(Color.red);
-        chart.setLowValueColour(Color.black);
-        setSize(chart.getChartSize().width, chart.getChartSize().height);
+        hMap = new HeatMap(map, true, Gradient.GRADIENT_HOT);
+        jScrollPane1.setViewportView(hMap);
+        hMap.setDrawLegend(true);
+        hMap.setDrawXTicks(true);
+        hMap.setDrawYTicks(true);
+        hMap.setCoordinateBounds(0, n, 0, n);
+        hMap.setDrawLegend(true);
+        
+        setBounds(50, 50, hMap.getWidth(), hMap.getHeight());
+        int i;
+        for(i = 0 ; i < n ; ++i){
+            map[0][i] = 0;
+            map[i][0] = 0;
+            map[0][n-1] = 0;
+        }
+        for(i = 0 ; i < n ; ++i)
+            map[n-1][i] = 100;
+        hMap.updateData(map, true);
+        hMap.repaint();
         pack();
     }
     
     void addValue(int i, int j, double value){
         map[i][j] = value;
-        chart.setZValues(map);
-        chartPanel.setChart(chart);
-        chartPanel.repaint();
-        pack();
+        hMap.updateData(map, true);
+        hMap.repaint();
+        System.out.printf("Added to plot[%d %d] %f \n",i,j,value);
     }
     
     
@@ -51,20 +62,9 @@ public class PlotFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        chartPanel = new prir.client.ChartPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout chartPanelLayout = new javax.swing.GroupLayout(chartPanel);
-        chartPanel.setLayout(chartPanelLayout);
-        chartPanelLayout.setHorizontalGroup(
-            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 262, Short.MAX_VALUE)
-        );
-        chartPanelLayout.setVerticalGroup(
-            chartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 261, Short.MAX_VALUE)
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,15 +72,15 @@ public class PlotFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(chartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -123,6 +123,6 @@ public static void main(String args[]) {
     }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private prir.client.ChartPanel chartPanel;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
