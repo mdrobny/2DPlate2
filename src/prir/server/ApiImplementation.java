@@ -15,7 +15,7 @@ public class ApiImplementation extends UnicastRemoteObject implements Api {
         super();
     }
 
-	@Override
+
 	public double temperature(double[][] p, int x, int y) throws RemoteException {
 		int i;
 		final double EPS = 0.0001;
