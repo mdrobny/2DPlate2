@@ -24,7 +24,7 @@
 }
 
 \begin{document}
-\title{\LARGE  Projekt nr 2 \\ \vspace{0.4cm} \textbf{Monte Carlo - rozkład temperatury w 2-D} w technologi Java RMI}
+\title{\LARGE  Projekt nr 2 \\ \vspace{0.4cm} \textbf{Monte Carlo - rozkład temperatury w 2-D}\\ w technologii Java RMI}
 \author{Michał Drobniak, 
  Marcin Piłat }
 \date{Maj 2013}
@@ -64,9 +64,16 @@ Ponieważ nie znane są temp. sąsiadów, więc używając tej samej metody moż
 \section{Opis implementacji algorytmu}
 Powyższy algorytm został zaimplementowany z jedną różnicą: na potrzeby wielowątkowości każdy proces oblicza 500 próbek temperatur (niezależnie od tego, czy się zbiegają, czy nie) i następnie oblicza temperaturę dzieląc ją przez liczbę próbek.\\
 \\
-Zgodnie z zasadami technologi Java RMI, implementacja tego algorytmu znajduje się w kodzie po stronie serwera, w odpowiedniej klasie implementującej publiczny interfejs (Api). Dzięki wiedzy że obiekt namiastki na pewno implementuje w powyższy sposób algorytm liczący temperaturę, można swobodnie zażądać wykonania metody temperature() na tym obiekcie po stronie klienta. Metoda ta zwróci wyliczoną temperaturę w zadanym punkcie [x,y] na podstawie aktualnej siatki p[N][N].
+Zgodnie z zasadami technologi Java RMI, implementacja tego algorytmu znajduje się w kodzie po stronie serwera, w odpowiedniej klasie implementującej publiczny interfejs (Api). Dzięki wiedzy że obiekt namiastki na pewno implementuje w powyższy sposób algorytm liczący temperaturę, można swobodnie zażądać wykonania metody temperature() na tym obiekcie po stronie klienta. Metoda ta zwróci wyliczoną temperaturę w zadanym punkcie [x,y] na podstawie aktualnej siatki p[N][N]. Każde żądanie uruchamiane jest jako nowy wątek przesłany do kolejnych serwerów, więc to klient odpowiedzialny jest za samą wielowątkowość.
 \\
 Obliczone i początkowe temperatury przechowujemy w tablicy o wymiarach N na N. Wszystkie temperatury oprócz brzegowych są zainicjalizowane wartością -1 (można tak zrobić, ponieważ Kelwiny nie przyjmują ujemnych wartości). Brzegowe temperatury są inicjalizowane zgodnie z treścią zadania: trzy ściany $0^{\circ}$ i czwarta $100^{\circ}$. Dlatego znana temperatura to temperatura większa lub równa $0^{\circ}$.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{schemat2.png}
+\caption{Schemat blokowy poszukiwania znanej temperatury}
+\end{center}
+\end{figure}
 
 \begin{figure}[H]
 \begin{center}
@@ -75,12 +82,7 @@ Obliczone i początkowe temperatury przechowujemy w tablicy o wymiarach N na N. 
 \end{center}
 \end{figure}
 
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{schemat2.png}
-\caption{Schemat blokowy poszukiwania znanej temperatury}
-\end{center}
-\end{figure}
+
 
 
 
@@ -96,11 +98,20 @@ Płytka została zainicjalizowana w następujący sposób:
 \begin{center}
 \includegraphics[width=0.7\textwidth]{grid.png}
 %\includegraphics[width=0.7\textwidth,angle=-90]{grid.eps}
-\caption{Wykres płytki w 2-D}
+\caption{Wykres płytki w gnuplocie}
 \end{center}
 \end{figure}
 
 Jak widać na powyższym wykresie płaszczyzny, najwyższa temp. jest przy prawej krawędzi, stopniowo malejąc w kierunku przeciwnym, w dół oraz w górę, co jest zgodne z oczekiwanym rozkładem temperatury na płytce.
+
+Dodaliśmy również wizualizację rozkładu ciepła na płytce w programie. W tym celu korzystaliśmy z klasy rysującej mapę ciepła napisanej przez Matthew Beckler, Josh Hayes-Sheen i J. Keller. Klasa ta jest udostępniana na licencji GNU. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{heatMapProg.png}
+\caption{Wykres płytki w programie}
+\end{center}
+\end{figure}
 
 \section{Opis uruchamiania programu}
 
@@ -111,7 +122,6 @@ Do kompilacji można wykorzystać polecenia:
 \end{enumerate}
 Do uruchomienia można wykorzystać polecenia:
 \begin{enumerate}
-	\item \textbf{'kill'} - zabija uruchomione servery
 	\item \textbf{'run\_server'} - uruchomienie 2 serwerów na kolejnych portach
 	\item \textbf{'run\_client'} - uruchomienie klienta korzystającego z 2 uprzednio uruchomionych serwerów
 \end{enumerate}
